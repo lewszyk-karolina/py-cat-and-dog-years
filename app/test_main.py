@@ -64,28 +64,51 @@ class TestGetHumanAge:
     ) -> None:
         assert get_human_age(cat_age, dog_age) == human_age
 
+    @pytest.mark.parametrize(
+        "cat_age, dog_age",
+        [
+            (-1, 5),
+            (5, -1),
+            (-10, -10),
+        ]
+    )
+    def test_negative_ages_raise_value_error(
+            self,
+            cat_age: int,
+            dog_age: int,
+    ) -> None:
+        with pytest.raises(ValueError):
+            get_human_age(cat_age, dog_age)
+
+    @pytest.mark.parametrize(
+        "cat_age, dog_age",
+        [
+            ("15", 15),   # Cat string
+            (15, "15"),   # Dog string
+            (15.5, 15),   # Cat float
+            (15, 15.5),   # Dog float
+            (None, 15),   # Cat None
+            (15, None),   # Dog None
+        ]
+    )
+    def test_wrong_types_raise_type_error(
+            self,
+            cat_age: int,
+            dog_age: int,
+    ) -> None:
+        with pytest.raises(TypeError):
+            get_human_age(cat_age, dog_age)
+
+
+def test_large_numbers() -> None:
+    assert get_human_age(1000, 1000) == [246, 197]
+
 
 def test_output_changes_when_input_changes() -> None:
     result1 = get_human_age(14, 14)
     result2 = get_human_age(15, 15)
-
     assert result1 != result2
-
-
-def test_cat_age_wrong_type() -> None:
-    with pytest.raises(TypeError):
-        get_human_age("15", 15)
-
-
-def test_zero_age() -> None:
-    assert get_human_age(0, 0) == [0, 0]
 
 
 def test_zero_and_normal() -> None:
     assert get_human_age(0, 15) == [0, 1]
-
-
-def test_large_numbers() -> None:
-    result = get_human_age(1000, 1000)
-    assert isinstance(result, list)
-    assert len(result) == 2
