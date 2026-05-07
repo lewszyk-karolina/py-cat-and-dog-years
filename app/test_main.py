@@ -63,3 +63,29 @@ class TestGetHumanAge:
         human_age: list[int],
     ) -> None:
         assert get_human_age(cat_age, dog_age) == human_age
+
+
+def test_output_changes_when_input_changes() -> None:
+    result1 = get_human_age(14, 14)
+    result2 = get_human_age(15, 15)
+
+    assert result1 != result2
+
+
+def test_cat_age_wrong_type() -> None:
+    with pytest.raises(TypeError):
+        get_human_age("15", 15)
+
+
+def test_zero_age() -> None:
+    assert get_human_age(0, 0) == [0, 0]
+
+
+def test_zero_and_normal() -> None:
+    assert get_human_age(0, 15) == [0, 1]
+
+
+def test_large_numbers() -> None:
+    result = get_human_age(1000, 1000)
+    assert isinstance(result, list)
+    assert len(result) == 2
